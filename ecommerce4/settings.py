@@ -18,6 +18,7 @@ DEBUG = True
 ALLOWED_HOSTS = [
     'localhost:8000',
     '127.0.0.1',
+    'dalmaz01.pythonanywhere.com',
 ]
 
 
