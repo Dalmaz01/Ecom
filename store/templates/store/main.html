@@ -49,12 +49,16 @@
 			document.cookie = 'cart=' + JSON.stringify(cart) + ';domain=;path=/'
 		}
 		console.log('Cart:', cart)
+
+
+
+
 	</script>
 
 </head>
 <body>
 
-	<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+	<nav class="navbar navbar-expand-lg navbar-dark">
 	  <a class="navbar-brand" href="{% url 'store:store' %}">Ecom</a>
 	  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
 	    <span class="navbar-toggler-icon"></span>
@@ -68,7 +72,11 @@
 
 	    </ul>
 	    <div class="form-inline my-2 my-lg-0">
-	     	<a href="#"class="btn btn-warning">Login</a>
+			{% if user.is_authenticated %}
+	     	<a href="{% url 'store:login' %}"class="btn btn-warning">Profile</a>
+			{% else %}
+			<a href="{% url 'store:login' %}"class="btn btn-warning">Login</a>
+			{% endif %}
 
 	     	<a href="{% url 'store:cart' %}">
 	    		<img  id="cart-icon" src="{% static 'store/images/cart.png' %}">
@@ -79,6 +87,57 @@
 	  </div>
 	</nav>
 
+	<div class="sidebar">
+		<ul>
+			<li>
+				<a href="{% url 'store:store' %}">
+					<span class="icon"><ion-icon class="fa" name="storefront-outline"></ion-icon></span>
+					<span class="title">Store</span>
+				</a>
+			</li>
+
+			{% if user.is_authenticated %}
+			<li>
+				<a href="#">
+					<span class="icon"><ion-icon class="fa" name="person-outline"></ion-icon></span>
+					<span class="title">Profile</span>
+				</a>
+			</li>
+			{% else %}
+			<li>
+				<a href="{% url 'store:login' %}">
+					<span class="icon"><ion-icon class="fa" name="person-outline"></ion-icon></span>
+					<span class="title">Sign In</span>
+				</a>
+			</li>
+			{% endif %}
+
+
+			<li>
+				<a href="{% url 'store:cart' %}">
+					<span class="icon"><ion-icon class="fa" name="cart-outline"></ion-icon></span>
+					<span class="title">Cart</span>
+				</a>
+			</li>
+
+			{% if user.is_authenticated %}
+			<li>
+				<a href="{% url 'store:logout_view' %}">
+					<span class="icon"><ion-icon class="fa" name="log-out-outline"></ion-icon></span>
+					<span class="title">Sign Out</span>
+				</a>
+			</li>
+			{% endif %}
+
+			<li>
+				<a id="dark" href="#">
+					<span class="icon"><ion-icon class="fa" name="moon-outline"></ion-icon></span>
+					<span class="title">Dark Mode</span>
+				</a>
+			</li>
+		</ul>
+	</div>
+
      <div class="container">
             <br>
             {% block content %}
@@ -88,6 +147,8 @@
          </div>
 
 
+
+
 	<script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
 
 	<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
@@ -95,5 +156,48 @@
 	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
 
 	<script src="{% static 'store/js/cart.js' %}"></script>
+
+	<script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
+	<script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
+
+	<script>
+		let body = document.querySelector('body');
+		let dark = document.querySelector('#dark');
+
+		var setTheme = localStorage.getItem('theme');
+
+
+		if(setTheme == null){
+			swapStyle('light');
+		}else{
+			swapStyle(setTheme);
+		}
+
+		function swapStyle(sheet){
+			localStorage.setItem('theme', sheet);
+			if(sheet == 'dark'){
+				body.classList.add(sheet);
+			}else{
+				body.classList.remove('dark');
+			}
+		}
+
+
+
+		dark.onclick = function(){
+			body.classList.toggle('dark');
+
+			if(body.classList.value == 'dark'){
+				localStorage.setItem('theme', 'dark');
+			}else{
+				localStorage.setItem('theme', 'light');
+			}
+			setTheme = localStorage.getItem('theme');
+			console.log(setTheme);
+		}
+
+
+		console.log(setTheme);
+	</script>
 </body>
 </html>

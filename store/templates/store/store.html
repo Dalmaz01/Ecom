@@ -2,21 +2,78 @@
 {% load static %}
 {% block content %}
 
-	<div class="row">
+<div class="row">
 		{% for product in products %}
+
+
+
 		<div class="col-lg-4">
-			<img class="thumbnail" src="{{product.imageURL}}">
+			<img class="thumbnail popup-link" href="#popup-{{product.pk}}" src="{{product.imageURL}}">
 			<div class="box-element product">
 				<h6><strong>{{product.name}}</strong></h6>
 				<hr>
 
 				<button data-action="add" data-product="{{product.pk}}" class="btn btn-outline-secondary add-btn update-cart">Add to Cart</button>
-				<a class="btn btn-outline-success" href="#">View</a>
+				<a class="btn btn-outline-success" href="{% url 'store:product_detail' product.pk %}">View</a>
 				<h4 style="display: inline-block; float: right"><strong>${{product.price}}</strong></h4>
 
 			</div>
 		</div>
+
+		<div id="popup-{{product.pk}}" class="popup">
+			<div class="popup__body">
+				<div class="popup__content">
+					<a href="#" class="popup__close close-popup">X</a>
+					<div class="popup__title">{{product.name}}</div>
+					<div class="popup__image"><img src="{{product.imageURL}}"></div>
+					<div class="popup__text">{{ product.price }}$</div>
+				</div>
+			</div>
+		</div>
+
+
 		{% endfor %}
 	</div>
 
+<script>
+	const popupLinks = document.querySelectorAll('.popup-link');
+
+
+if (popupLinks.length > 0) {
+	for (let index = 0; index < popupLinks.length; index++) {
+		const popupLink = popupLinks[index]
+		popupLink.addEventListener("click", function (e) {
+			const popupName = popupLink.getAttribute('href').replace('#', '');
+			const curentPopup = document.getElementById(popupName);
+			popupOpen(curentPopup)
+			e.preventDefault();
+		});
+	}
+}
+const popupCloseIcon = document.querySelectorAll('.close-popup');
+if (popupCloseIcon.length > 0) {
+	for (let index = 0; index < popupCloseIcon.length; index++) {
+		const el = popupCloseIcon[index]
+		el.addEventListener('click', function(e) {
+			popupClose(el.closest('.popup'));
+			e.preventDefault();
+		});
+	}
+}
+
+function popupOpen(curentPopup) {
+	if (curentPopup ) {
+		const popupActive = document.querySelector('.popup.open');
+
+		curentPopup.classList.add('open');
+
+	}
+}
+function popupClose(popupActive) {
+
+		popupActive.classList.remove('open');
+
+}
+
+</script>
 {% endblock content %}

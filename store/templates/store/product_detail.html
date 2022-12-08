@@ -1,0 +1,14 @@
+{% extends 'store/main.html' %}
+
+{% block content %}
+
+    <div class="product_detail">
+        <div class="image"><img src="{{ product.imageURL }}"></div>
+        <div class="about_product">
+            <div class="title">{{ product.name }}</div>
+            <div class="description">{{ product.description }}</div>
+            <div class="price">{{ product.price }}$</div>
+            <button data-action="add" data-product="{{product.pk}}" class="btn btn-outline-secondary add-btn update-cart">Add to Cart</button>
+        </div>
+    </div>
+{% endblock %}

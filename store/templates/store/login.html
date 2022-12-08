@@ -1,0 +1,47 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="{% static 'store/css/login_style.css' %}">
+    <title>Title</title>
+</head>
+<body>
+    <div class="center">
+        <h1>Login</h1>
+
+        <form method="post" >
+            {% if error %}
+            <p class="text-danger">{{ error }}</p>
+            {% endif %}
+            {% csrf_token %}
+            <div class="txt_field">
+                <input type="text" name="login" autocomplete="off" required>
+                <span></span>
+                <label>Username</label>
+            </div>
+            <div class="txt_field">
+                <input type="password" name="password" required>
+                <span></span>
+                <label>Password</label>
+            </div>
+            <div class="pass">Forgot Password?</div>
+            <input type="submit" value="Login">
+            <div class="signup_link">
+                Not a member? <a href="{% url 'store:register' %}">Sign Up</a>
+            </div>
+        </form>
+    </div>
+
+    <script>
+        let body = document.querySelector('body');
+
+        var setTheme = localStorage.getItem('theme');
+
+        if(setTheme == 'dark'){
+            body.classList.add('dark');
+            console.log('dark');
+        }
+    </script>
+</body>
+</html>
